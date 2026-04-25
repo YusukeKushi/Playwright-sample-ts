@@ -23,8 +23,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RUN_ID=$(gh run list --workflow build.yml --repo YusukeKushi/SampleSpringApp --status success --limit 1 --json databaseId -q ".[0].databaseId")
-          gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar      
+          RUN_ID=$(gh run list --workflow build.yml --repo YusukeKushi/SampleSpringApp --branch master --status success --limit 1 --json databaseId -q ".[0].databaseId")
+          gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
       - name: Setup and Run Tests
         run: |
           # （以下、以前と同じようにテストを実行する手順）
