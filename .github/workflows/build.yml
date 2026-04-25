@@ -14,6 +14,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # 【重要】これが無いとコードがGitHubのサーバー上に展開されません！
+      - uses: actions/checkout@v4
+
       # 1. Javaを先に準備しておく
       - uses: actions/setup-java@v4
         with: 
