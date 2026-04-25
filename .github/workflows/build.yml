@@ -4,39 +4,25 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read  # 権限をここで明示的に指定
     steps:
       - uses: actions/checkout@v4
-      
-      # 1. アプリ側から最新JARを取得
-      #- name: Download App JAR
-      #  uses: dawiddoc/action-download-artifact@v2
-      #  with:
-      #    github_token: ${{secrets.GITHUB_TOKEN}}
-      #    workflow: build.yml
-      #    repo: YusukeKushi/SampleSpringApp
-      #    name: app-jar
 
-      # 1.公式アクションを使って、別のワークフローの成功したArtifactを特定して落とす
-      - name: Download Artifact from App Repo
-        uses: dawiddoc/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml # アプリ側のワークフロー名
-          repo: YusukeKushi/SampleSpringApp
-          workflow_conclusion: success # 成功したものだけを対象にする
-          name: app-jar
-          
-      # 2. 環境セットアップ
-      - uses: actions/setup-java@v4
-        with: { java-version: '17', distribution: 'temurin' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: npm ci
-      - run: npx playwright install --with-deps
-
-      # 3. アプリ起動 & テスト
-      - name: Start App and Run Tests
+      # 公式ghコマンドで、Appリポジトリの最新成功ワークフローからArtifactを落とす
+      - name: Download App JAR with gh CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # 1. 最新の成功したワークフロー実行IDを取得
+          RUN_ID=$(gh run list --workflow build.yml --repo YusukeKushi/SampleSpringApp --status success --limit 1 --json databaseId -q ".[0].databaseId")
+          
+          # 2. そのIDからArtifactをダウンロード
+          gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
+          
+      - name: Setup and Run Tests
+        run: |
+          # （以下、以前と同じようにテストを実行する手順）
           java -jar *.jar &
           npx wait-on http://localhost:8080
           npx playwright test
