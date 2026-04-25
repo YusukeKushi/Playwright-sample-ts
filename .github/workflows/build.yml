@@ -52,7 +52,9 @@ jobs:
           gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
       - name: Setup and Run Tests
         run: |
-          # （以下、以前と同じようにテストを実行する手順）
-          java -jar *.jar &
+          java -jar app-jar/*.jar \
+            --spring.profiles.active=test \
+            --spring.sql.init.mode=always \
+            --spring.jpa.defer-datasource-initialization=true &
           npx wait-on http://localhost:8080
           npx playwright test
