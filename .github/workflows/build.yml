@@ -1,0 +1,32 @@
+# Playwright-sample-ts/.github/workflows/test.yml
+name: Run Playwright Tests
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      # 1. アプリ側から最新JARを取得
+      - name: Download App JAR
+        uses: dawiddoc/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          repo: YusukeKushi/SampleSpringApp
+          name: app-jar
+          
+      # 2. 環境セットアップ
+      - uses: actions/setup-java@v4
+        with: { java-version: '17', distribution: 'temurin' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: npx playwright install --with-deps
+
+      # 3. アプリ起動 & テスト
+      - name: Start App and Run Tests
+        run: |
+          java -jar *.jar &
+          npx wait-on http://localhost:8080
+          npx playwright test
