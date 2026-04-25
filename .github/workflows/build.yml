@@ -52,7 +52,7 @@ jobs:
           gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
       - name: Setup and Run Tests
         run: |
-          java -jar app-jar/*.jar \
+          java -jar app-jar/**/*.jar ... \
             --spring.profiles.active=test \
             --spring.sql.init.mode=always \
             --spring.jpa.defer-datasource-initialization=true &
