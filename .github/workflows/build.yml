@@ -30,11 +30,10 @@ jobs:
 
       # 3. パッケージをインストール
       - name: Install dependencies
-        run: npm install
-
-      # 4. Playwrightのブラウザバイナリをインストール（初回のみ必要）
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: |
+          npm install
+          npm install -D allure-playwright
+          run: npx playwright install --with-deps
 
       # 5. actions/checkout を使わず、gh コマンドで必要なソースだけをダウンロードする
       #- name: Checkout manually
@@ -72,3 +71,24 @@ jobs:
             --spring.jpa.defer-datasource-initialization=true &
           npx wait-on http://localhost:8080
           npx playwright test
+
+          continue-on-error: true
+
+      - name: Generate Allure Report
+        if: always() # テスト結果に関わらず実行
+        run: |
+          npx allure generate allure-results -o allure-report --clean
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.MY_PAT }}
+          publish_dir: ./allure-report
