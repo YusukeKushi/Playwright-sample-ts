@@ -1,6 +1,12 @@
 # Playwright-sample-ts/.github/workflows/test.yml
 name: Run Playwright Tests
 on: [push]
+
+# ここが重要！ワークフロー全体に権限を付与する
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
