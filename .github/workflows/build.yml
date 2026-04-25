@@ -18,7 +18,7 @@ jobs:
         run: |
           gh repo clone YusukeKushi/Playwright-sample-ts .
       
-      # 2. あとは同じ手順でビルド成果物を落とす
+      # 2. あとは同じ手順でビルド成果物を落とす (test)
       - name: Download App JAR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
