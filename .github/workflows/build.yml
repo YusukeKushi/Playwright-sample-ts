@@ -50,9 +50,23 @@ jobs:
         run: |
           RUN_ID=$(gh run list --repo YusukeKushi/SampleSpringApp --status success --limit 1 --json databaseId -q ".[0].databaseId")
           gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
+          
       - name: Setup and Run Tests
         run: |
-          java -jar app-jar/**/*.jar ... \
+          # 1. jarファイルを探索してパスを特定（最初に見つかったものを採用）
+          JAR_PATH=$(find . -name "*.jar" | head -n 1)
+          
+          # 念のためのチェック
+          if [ -z "$JAR_PATH" ]; then
+            echo "Error: JAR file not found!"
+            ls -R
+            exit 1
+          fi
+          
+          echo "Found JAR: $JAR_PATH"
+          
+          # 2. 変数化したパスで実行
+          java -jar "$JAR_PATH" \
             --spring.profiles.active=test \
             --spring.sql.init.mode=always \
             --spring.jpa.defer-datasource-initialization=true &
