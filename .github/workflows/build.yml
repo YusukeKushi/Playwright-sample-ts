@@ -11,14 +11,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # 1. actions/checkout を使わず、gh コマンドで必要なソースだけをダウンロードする
+      # 1. Javaを先に準備しておく
+      - uses: actions/setup-java@v4
+        with: 
+          java-version: '24' 
+          distribution: 'temurin'
+
+      # 2. actions/checkout を使わず、gh コマンドで必要なソースだけをダウンロードする
       - name: Checkout manually
         env:
           GH_TOKEN: ${{ secrets.MY_PAT }}
         run: |
           gh repo clone YusukeKushi/Playwright-sample-ts .
       
-      # 2. あとは同じ手順でビルド成果物を落とす (test)
+      # 3. あとは同じ手順でビルド成果物を落とす (test)
       - name: Download App JAR
         env:
           GH_TOKEN: ${{ secrets.MY_PAT }}
