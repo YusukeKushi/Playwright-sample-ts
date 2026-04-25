@@ -14,14 +14,14 @@ jobs:
       # 1. actions/checkout を使わず、gh コマンドで必要なソースだけをダウンロードする
       - name: Checkout manually
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MY_PAT }}
         run: |
           gh repo clone YusukeKushi/Playwright-sample-ts .
       
       # 2. あとは同じ手順でビルド成果物を落とす (test)
       - name: Download App JAR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MY_PAT }}
         run: |
           RUN_ID=$(gh run list --repo YusukeKushi/SampleSpringApp --status success --limit 1 --json databaseId -q ".[0].databaseId")
           gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
