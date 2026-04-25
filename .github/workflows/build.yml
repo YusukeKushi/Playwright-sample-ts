@@ -1,6 +1,9 @@
 # Playwright-sample-ts/.github/workflows/test.yml
 name: Run Playwright Tests
-on: [push]
+on:
+  repository_dispatch:
+    types: [run-playwright-tests]
+  push: # 手動テスト用にpushも残しておいてOK
 
 # ここが重要！ワークフロー全体に権限を付与する
 permissions:
