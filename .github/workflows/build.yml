@@ -10,22 +10,21 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read  # 権限をここで明示的に指定
     steps:
-      - uses: actions/checkout@v4
-
-      # 公式ghコマンドで、Appリポジトリの最新成功ワークフローからArtifactを落とす
-      - name: Download App JAR with gh CLI
+      # 1. actions/checkout を使わず、gh コマンドで必要なソースだけをダウンロードする
+      - name: Checkout manually
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 1. 最新の成功したワークフロー実行IDを取得
+          gh repo clone YusukeKushi/Playwright-sample-ts .
+      
+      # 2. あとは同じ手順でビルド成果物を落とす
+      - name: Download App JAR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           RUN_ID=$(gh run list --workflow build.yml --repo YusukeKushi/SampleSpringApp --status success --limit 1 --json databaseId -q ".[0].databaseId")
-          
-          # 2. そのIDからArtifactをダウンロード
-          gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar
-          
+          gh run download $RUN_ID --repo YusukeKushi/SampleSpringApp --name app-jar      
       - name: Setup and Run Tests
         run: |
           # （以下、以前と同じようにテストを実行する手順）
