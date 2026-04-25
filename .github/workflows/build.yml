@@ -15,6 +15,16 @@ jobs:
           workflow: build.yml
           repo: YusukeKushi/SampleSpringApp
           name: app-jar
+
+      # 1. ビルド工場から最新のJARをダウンロード（修正版）
+      #- name: Download App JAR
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: app-jar
+      #    # 別のリポジトリから持ってくるときは repository を指定する
+      #    repository: YusukeKushi/SampleSpringApp
+      #    # 最近のGitHub Actionsでは run-id を指定するのが確実です
+      #    run-id: ${{ github.run_id }} # ※ここは少し調整が必要です（下記参照）
           
       # 2. 環境セットアップ
       - uses: actions/setup-java@v4
