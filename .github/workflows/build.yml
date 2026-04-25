@@ -8,23 +8,23 @@ jobs:
       - uses: actions/checkout@v4
       
       # 1. アプリ側から最新JARを取得
-      - name: Download App JAR
+      #- name: Download App JAR
+      #  uses: dawiddoc/action-download-artifact@v2
+      #  with:
+      #    github_token: ${{secrets.GITHUB_TOKEN}}
+      #    workflow: build.yml
+      #    repo: YusukeKushi/SampleSpringApp
+      #    name: app-jar
+
+      # 1.公式アクションを使って、別のワークフローの成功したArtifactを特定して落とす
+      - name: Download Artifact from App Repo
         uses: dawiddoc/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
+          workflow: build.yml # アプリ側のワークフロー名
           repo: YusukeKushi/SampleSpringApp
+          workflow_conclusion: success # 成功したものだけを対象にする
           name: app-jar
-
-      # 1. ビルド工場から最新のJARをダウンロード（修正版）
-      #- name: Download App JAR
-      #  uses: actions/download-artifact@v4
-      #  with:
-      #    name: app-jar
-      #    # 別のリポジトリから持ってくるときは repository を指定する
-      #    repository: YusukeKushi/SampleSpringApp
-      #    # 最近のGitHub Actionsでは run-id を指定するのが確実です
-      #    run-id: ${{ github.run_id }} # ※ここは少し調整が必要です（下記参照）
           
       # 2. 環境セットアップ
       - uses: actions/setup-java@v4
