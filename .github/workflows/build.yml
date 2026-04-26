@@ -70,13 +70,18 @@ jobs:
             --spring.sql.init.mode=always \
             --spring.jpa.defer-datasource-initialization=true &
           npx wait-on http://localhost:8080
-          npx playwright test
-
+          npx playwright test --reporter=line,allure-playwright
           continue-on-error: true
 
       - name: Generate Allure Report
         if: always() # テスト結果に関わらず実行
         run: |
+          echo "--- フォルダの中身を確認 ---"
+          ls -R
+          
+          # allure-results が見当たらない場合、探してみる
+          find . -name "allure-results"
+          
           npx allure-commandline generate allure-results -o allure-report --clean
 
       - name: Upload Allure Report
