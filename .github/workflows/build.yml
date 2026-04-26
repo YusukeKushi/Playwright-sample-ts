@@ -71,7 +71,7 @@ jobs:
             --spring.jpa.defer-datasource-initialization=true &
           npx wait-on http://localhost:8080
           npx playwright test --reporter=line,allure-playwright
-          continue-on-error: true
+        continue-on-error: true
 
       - name: Generate Allure Report
         if: always() # テスト結果に関わらず実行
