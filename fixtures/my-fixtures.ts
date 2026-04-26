@@ -1,6 +1,7 @@
 import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { TopPage } from '../pages/TopPage';
+import * as allureApi from "allure-js-commons";
 
 // 型を定義して拡張する
 type MyFixtures = {
@@ -16,6 +17,12 @@ export const test = base.extend<MyFixtures>({
   topPage: async ({ page }, use) => {
     await use(new TopPage(page));
   },
+});
+
+// 2. この拡張されたtestに対して、afterEachを適用する
+test.afterEach(async ({ page }, testInfo) => {
+  const screenshot = await page.screenshot();
+  await allureApi.attachment("snapshot", screenshot, "image/png");
 });
 
 export { expect } from '@playwright/test';
