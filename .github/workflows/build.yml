@@ -73,8 +73,8 @@ jobs:
           npx wait-on http://localhost:8080
           npx playwright test --reporter=line,allure-playwright
           # 【重要】test-results にある画像を allure-results に移動する
-          # これをしないと、Allureは画像ファイルを見つけられません
-          cp -r test-results/*/*.png allure-results/ || true
+          # これをしないと、Allureは画像ファイルを見つけられません（だがAllure-reportがallure-resultsに入れているのでもう不要？）
+          # cp -r test-results/*/*.png allure-results/ || true
         continue-on-error: true
 
       - name: Debug Screenshot Paths
@@ -91,6 +91,8 @@ jobs:
         run: |
           echo "--- フォルダの中身を確認 ---"
           ls -R
+          echo "--- allure-reportを除去 ---"
+          rm -rf allure-report
           
           # allure-results が見当たらない場合、探してみる
           find . -name "allure-results"
