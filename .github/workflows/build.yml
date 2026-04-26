@@ -81,7 +81,6 @@ jobs:
           
           # allure-results が見当たらない場合、探してみる
           find . -name "allure-results"
-          
           npx allure-commandline generate allure-results -o allure-report --clean
 
       - name: Upload Allure Report
