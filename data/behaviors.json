@@ -1,1 +1,1 @@
-{"uid":"b1a8273437954620fa374b796ffaacdd","name":"behaviors","children":[]}
+{"uid":"b1a8273437954620fa374b796ffaacdd","name":"behaviors","children":[{"name":"Fixturesでログイン成功テスト","uid":"b5d80c8c8557a230","parentUid":"b1a8273437954620fa374b796ffaacdd","status":"passed","time":{"start":1777162540461,"stop":1777162541956,"duration":1495},"flaky":false,"newFailed":false,"newPassed":false,"newBroken":false,"retriesCount":0,"retriesStatusChange":false,"parameters":[],"tags":[]}]}
