@@ -1,14 +1,20 @@
 pipeline {
     agent any
+    tools {
+        // 設定した名前に合わせる
+        nodejs 'NodeJS-24'
+    }
     stages {
-        stage('Build') {
+        stage('Check Version') {
             steps {
-                echo 'Building...'
+                // ここで node コマンドが使えるようになっている！
+                sh 'node -v'
+                sh 'npm -v'
             }
         }
-        stage('Test') {
+        stage('Install') {
             steps {
-                echo 'Testing...'
+                sh 'npm install'
             }
         }
     }
