@@ -77,6 +77,15 @@ jobs:
           cp -r test-results/*/*.png allure-results/ || true
         continue-on-error: true
 
+      - name: Debug Screenshot Paths
+        if: always()
+        run: |
+          echo "--- 全ディレクトリの構成 ---"
+          find . -type d -name "test-results"
+          find . -type d -name "allure-results"
+          echo "--- PNGファイルを探す ---"
+          find . -name "*.png"
+
       - name: Generate Allure Report
         if: always() # テスト結果に関わらず実行
         run: |

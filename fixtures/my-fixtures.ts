@@ -23,6 +23,7 @@ export const test = base.extend<MyFixtures>({
 test.afterEach(async ({ page }, testInfo) => {
   const screenshot = await page.screenshot();
   await allureApi.attachment("snapshot", screenshot, "image/png");
+  console.log(`Screenshot attached for test: ${testInfo.title}`);
 });
 
 export { expect } from '@playwright/test';
