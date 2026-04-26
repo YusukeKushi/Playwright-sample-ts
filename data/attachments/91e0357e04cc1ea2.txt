@@ -1,0 +1,1 @@
+Screenshot attached for test: Fixturesでログイン成功テスト
