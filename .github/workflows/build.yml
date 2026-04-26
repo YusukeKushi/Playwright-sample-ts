@@ -77,7 +77,7 @@ jobs:
       - name: Generate Allure Report
         if: always() # テスト結果に関わらず実行
         run: |
-          npx allure generate allure-results -o allure-report --clean
+          npx allure-commandline generate allure-results -o allure-report --clean
 
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
